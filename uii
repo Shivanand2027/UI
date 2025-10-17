@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Match - Find Your Life Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cream': '#FDF8F3',
+                        'soft-pink': '#F8E8E8',
+                        'warm-gold': '#D4AF37',
+                        'deep-maroon': '#8B1538'
+                    },
+                    animation: {
+                        'typing': 'typing 3.5s steps(40, end), blink-caret .75s step-end infinite',
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
+                        'bounce-gentle': 'bounceGentle 2s infinite',
+                        'glow-pulse': 'glowPulse 2s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'particle-float': 'particleFloat 8s linear infinite',
+                        'scale-in': 'scaleIn 0.5s ease-out',
+                        'typing-dots': 'typingDots 1.4s infinite ease-in-out'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #8B1538; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes bounceGentle {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        @keyframes glowPulse {
+            from { box-shadow: 0 0 20px rgba(139, 21, 56, 0.4); }
+            to { box-shadow: 0 0 30px rgba(139, 21, 56, 0.8), 0 0 40px rgba(139, 21, 56, 0.4); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes typingDots {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        .typing-text {
+            overflow: hidden;
+            border-right: 3px solid #8B1538;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease-out;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .hover-scale {
+            transition: all 0.3s ease-out;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.03);
+        }
+        
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+        
+        .navbar-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        
+        .input-focus:focus {
+            border-color: #8B1538;
+            box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .card-tilt {
+            transition: all 0.3s ease;
+        }
+        
+        .card-tilt:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(10px);
+        }
+        
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(139, 21, 56, 0.1);
+            animation: particleFloat 8s linear infinite;
+        }
+        
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 6s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 7s; }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        
+        .page-transition {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #8B1538;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #8B1538;
+            margin: 0 2px;
+            animation: typingDots 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body class="bg-cream font-sans page-transition">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-deep-maroon font-semibold">Finding your perfect match...</p>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header id="navbar" class="bg-white shadow-lg sticky top-0 z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 md:h-20">
+                <div class="flex items-center animate-slide-in-left">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl md:text-2xl font-bold text-deep-maroon hover:scale-105 transition-transform duration-300">Perfect<span class="text-warm-gold">Match</span></h1>
+                    </div>
+                </div>
+                <nav class="hidden md:block animate-fade-in">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#" class="text-gray-700 hover:text-deep-maroon px-3 py-2 text-sm font-medium transition-all duration-300 relative group">
+                            Home
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-deep-maroon transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#" class="text-gray-700 hover:text-deep-maroon px-3 py-2 text-sm font-medium transition-all duration-300 relative group">
+                            About
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-deep-maroon transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#" class="text-gray-700 hover:text-deep-maroon px-3 py-2 text-sm font-medium transition-all duration-300 relative group">
+                            Success Stories
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-deep-maroon transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#" class="text-gray-700 hover:text-deep-maroon px-3 py-2 text-sm font-medium transition-all duration-300 relative group">
+                            Membership
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-deep-maroon transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#" class="text-gray-700 hover:text-deep-maroon px-3 py-2 text-sm font-medium transition-all duration-300 relative group">
+                            Contact
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-deep-maroon transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#" class="text-gray-700 hover:text-deep-maroon px-3 py-2 text-sm font-medium transition-all duration-300 relative group">
+                            Login
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-deep-maroon transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                    </div>
+                </nav>
+                <div class="flex items-center space-x-4 animate-slide-in-right">
+                    <button class="bg-deep-maroon text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm md:text-base font-semibold hover-lift btn-glow animate-glow-pulse relative overflow-hidden group">
+                        <span class="relative z-10">Join Now</span>
+                        <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </button>
+                    <button class="md:hidden text-gray-700 hover:text-deep-maroon transition-colors duration-300">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-soft-pink to-cream min-h-[600px] md:min-h-[700px] flex items-center overflow-hidden">
+        <!-- Floating Particles -->
+        <div class="floating-particles">
+            <div class="particle">💕</div>
+            <div class="particle">💖</div>
+            <div class="particle">💝</div>
+            <div class="particle">💍</div>
+            <div class="particle">💕</div>
+            <div class="particle">💖</div>
+            <div class="particle">💝</div>
+            <div class="particle">💍</div>
+        </div>
+        
+        <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Happy couple" class="w-full h-full object-cover opacity-30 hover:scale-105 transition-transform duration-[10s]">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="animate-slide-up">
+                <h1 id="typing-headline" class="text-3xl md:text-5xl lg:text-6xl font-bold text-deep-maroon mb-4 md:mb-6 typing-text">
+                    Find Your Perfect Match
+                </h1>
+            </div>
+            <p class="text-lg md:text-xl text-gray-700 mb-8 md:mb-12 max-w-2xl mx-auto animate-fade-in" style="animation-delay: 0.5s; opacity: 0; animation-fill-mode: forwards;">
+                Discover meaningful connections with verified profiles from around the world. Your journey to happiness starts here.
+            </p>
+            
+            <!-- Search Form -->
+            <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-4xl mx-auto hover-lift animate-scale-in" style="animation-delay: 1s; opacity: 0; animation-fill-mode: forwards;">
+                <h3 class="text-xl md:text-2xl font-semibold text-deep-maroon mb-6">Start Your Search</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Looking for</label>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-300">
+                            <option>Bride</option>
+                            <option>Groom</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-300">
+                            <option>21-25</option>
+                            <option>26-30</option>
+                            <option>31-35</option>
+                            <option>36-40</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Religion</label>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-300">
+                            <option>Any</option>
+                            <option>Hindu</option>
+                            <option>Muslim</option>
+                            <option>Christian</option>
+                            <option>Sikh</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                        <input type="text" placeholder="Enter city" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-300">
+                    </div>
+                    <div class="flex items-end">
+                        <button class="w-full bg-warm-gold text-white px-6 py-3 rounded-lg font-semibold hover-lift btn-glow group transition-all duration-300">
+                            <i class="fas fa-search mr-2 group-hover:rotate-12 transition-transform duration-300"></i>Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 md:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 md:mb-16 scroll-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-deep-maroon mb-4">Why Choose PerfectMatch?</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Experience the most trusted and secure platform for finding your life partner</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center p-6 rounded-2xl bg-soft-pink hover-scale card-tilt scroll-reveal stagger-1 group">
+                    <div class="w-16 h-16 bg-deep-maroon rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-bounce-gentle transition-all duration-300">
+                        <i class="fas fa-shield-alt text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-deep-maroon mb-3">Verified Profiles</h3>
+                    <p class="text-gray-600">100% verified profiles with background checks for your safety and peace of mind</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-soft-pink hover-scale card-tilt scroll-reveal stagger-2 group">
+                    <div class="w-16 h-16 bg-warm-gold rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-bounce-gentle transition-all duration-300">
+                        <i class="fas fa-lock text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-deep-maroon mb-3">Secure Platform</h3>
+                    <p class="text-gray-600">Advanced security measures to protect your personal information and privacy</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-soft-pink hover-scale card-tilt scroll-reveal stagger-3 group">
+                    <div class="w-16 h-16 bg-deep-maroon rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-bounce-gentle transition-all duration-300">
+                        <i class="fas fa-brain text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-deep-maroon mb-3">AI Matchmaking</h3>
+                    <p class="text-gray-600">Smart algorithms that find compatible matches based on your preferences</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-soft-pink hover-scale card-tilt scroll-reveal stagger-4 group">
+                    <div class="w-16 h-16 bg-warm-gold rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-bounce-gentle transition-all duration-300">
+                        <i class="fas fa-comments text-white text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-deep-maroon mb-3">Easy Communication</h3>
+                    <p class="text-gray-600">Seamless messaging and video calling features to connect with matches</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories Section -->
+    <section class="py-16 md:py-20 bg-gradient-to-br from-soft-pink to-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 md:mb-16 scroll-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-deep-maroon mb-4">Success Stories</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Real couples who found their perfect match through our platform</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover-scale scroll-reveal stagger-1 group">
+                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Happy couple" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-warm-gold">
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.1s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.2s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.3s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.4s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.5s"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4 italic">"We found each other through PerfectMatch and got married last year. The platform made it so easy to connect with like-minded people."</p>
+                        <div class="text-sm text-deep-maroon font-semibold">
+                            - Priya & Rahul, Married Dec 2023
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover-scale scroll-reveal stagger-2 group">
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Happy couple" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-warm-gold">
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.1s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.2s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.3s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.4s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.5s"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4 italic">"The verification process gave us confidence, and the AI matching was spot on. We're planning our wedding next month!"</p>
+                        <div class="text-sm text-deep-maroon font-semibold">
+                            - Anjali & Vikram, Engaged Jan 2024
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover-scale scroll-reveal stagger-3 group">
+                    <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Happy couple" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-warm-gold">
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.1s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.2s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.3s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.4s"></i>
+                                <i class="fas fa-star animate-bounce" style="animation-delay: 0.5s"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4 italic">"After trying other platforms, PerfectMatch was different. The quality of profiles and genuine connections made all the difference."</p>
+                        <div class="text-sm text-deep-maroon font-semibold">
+                            - Meera & Arjun, Married Mar 2024
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Plans Section -->
+    <section class="py-16 md:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 md:mb-16 scroll-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-deep-maroon mb-4">Choose Your Plan</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Select the perfect membership plan that suits your needs</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Free Plan -->
+                <div class="bg-gray-50 rounded-2xl p-8 shadow-lg hover-scale scroll-reveal stagger-1">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Free</h3>
+                        <div class="text-4xl font-bold text-gray-800 mb-6">₹0<span class="text-lg font-normal">/month</span></div>
+                        <ul class="text-left space-y-3 mb-8">
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-green-500 mr-3"></i>Basic profile creation</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-green-500 mr-3"></i>View 5 profiles daily</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-green-500 mr-3"></i>Send 2 interests daily</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-times text-red-500 mr-3"></i>No direct messaging</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-times text-red-500 mr-3"></i>No advanced filters</li>
+                        </ul>
+                        <button class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover-lift btn-glow group">
+                            Get Started
+                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="bg-deep-maroon rounded-2xl p-8 shadow-xl hover-scale scroll-reveal stagger-2 transform scale-105 relative animate-glow-pulse">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-bounce-gentle">
+                        <span class="bg-warm-gold text-white px-4 py-1 rounded-full text-sm font-semibold">Recommended</span>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-white mb-2">Premium</h3>
+                        <div class="text-4xl font-bold text-white mb-6">₹999<span class="text-lg font-normal">/month</span></div>
+                        <ul class="text-left space-y-3 mb-8 text-white">
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-warm-gold mr-3"></i>Unlimited profile views</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-warm-gold mr-3"></i>Direct messaging</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-warm-gold mr-3"></i>Advanced search filters</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-warm-gold mr-3"></i>Profile boost feature</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-warm-gold mr-3"></i>Video calling</li>
+                        </ul>
+                        <button class="w-full bg-warm-gold text-white py-3 rounded-lg font-semibold hover-lift btn-glow group">
+                            Choose Premium
+                            <i class="fas fa-crown ml-2 transform group-hover:rotate-12 transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Elite Plan -->
+                <div class="bg-gradient-to-br from-warm-gold to-yellow-600 rounded-2xl p-8 shadow-lg hover-scale scroll-reveal stagger-3">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-white mb-2">Elite</h3>
+                        <div class="text-4xl font-bold text-white mb-6">₹1999<span class="text-lg font-normal">/month</span></div>
+                        <ul class="text-left space-y-3 mb-8 text-white">
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-white mr-3"></i>All Premium features</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-white mr-3"></i>Personal matchmaker</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-white mr-3"></i>Priority customer support</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-white mr-3"></i>Profile verification badge</li>
+                            <li class="flex items-center transform hover:translate-x-2 transition-transform duration-300"><i class="fas fa-check text-white mr-3"></i>Exclusive events access</li>
+                        </ul>
+                        <button class="w-full bg-white text-warm-gold py-3 rounded-lg font-semibold hover-lift btn-glow group">
+                            Go Elite
+                            <i class="fas fa-gem ml-2 transform group-hover:rotate-12 transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 md:py-20 bg-soft-pink">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 md:mb-16 scroll-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-deep-maroon mb-4">What Our Users Say</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Hear from thousands of satisfied members who found love</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-6 shadow-lg hover-scale scroll-reveal stagger-1 group">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="User" class="w-12 h-12 rounded-full mr-4 group-hover:scale-110 transition-transform duration-300">
+                        <div>
+                            <h4 class="font-semibold text-deep-maroon">Kavya Sharma</h4>
+                            <div class="flex text-warm-gold text-sm">
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"The platform is incredibly user-friendly and the verification process made me feel secure. Found my soulmate within 3 months!"</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-lg hover-scale scroll-reveal stagger-2 group">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="User" class="w-12 h-12 rounded-full mr-4 group-hover:scale-110 transition-transform duration-300">
+                        <div>
+                            <h4 class="font-semibold text-deep-maroon">Rohit Patel</h4>
+                            <div class="flex text-warm-gold text-sm">
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Amazing customer service and genuine profiles. The AI matching really works - it suggested my now-fiancée as a 98% match!"</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-lg hover-scale scroll-reveal stagger-3 group">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="User" class="w-12 h-12 rounded-full mr-4 group-hover:scale-110 transition-transform duration-300">
+                        <div>
+                            <h4 class="font-semibold text-deep-maroon">Sneha Reddy</h4>
+                            <div class="flex text-warm-gold text-sm">
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                                <i class="fas fa-star hover:scale-125 transition-transform duration-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"I was skeptical about online matrimony, but PerfectMatch changed my perspective. The quality of profiles and serious intentions impressed me."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Match Cards Section -->
+    <section class="py-16 md:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 md:mb-16 scroll-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-deep-maroon mb-4">Featured Profiles</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover verified profiles of potential matches</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover-scale card-tilt scroll-reveal stagger-1 group">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Profile" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-deep-maroon text-lg mb-1">Ananya, 26</h3>
+                        <p class="text-gray-600 text-sm mb-2">Software Engineer, Mumbai</p>
+                        <p class="text-gray-500 text-xs mb-3">Hindu, Never Married</p>
+                        <button class="w-full bg-deep-maroon text-white py-2 rounded-lg text-sm font-semibold hover-lift btn-glow group">
+                            View Profile
+                            <i class="fas fa-heart ml-2 transform group-hover:scale-125 group-hover:text-pink-300 transition-all duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover-scale card-tilt scroll-reveal stagger-2 group">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Profile" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-deep-maroon text-lg mb-1">Arjun, 29</h3>
+                        <p class="text-gray-600 text-sm mb-2">Doctor, Delhi</p>
+                        <p class="text-gray-500 text-xs mb-3">Hindu, Never Married</p>
+                        <button class="w-full bg-deep-maroon text-white py-2 rounded-lg text-sm font-semibold hover-lift btn-glow group">
+                            View Profile
+                            <i class="fas fa-heart ml-2 transform group-hover:scale-125 group-hover:text-pink-300 transition-all duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover-scale card-tilt scroll-reveal stagger-3 group">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Profile" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-deep-maroon text-lg mb-1">Priya, 24</h3>
+                        <p class="text-gray-600 text-sm mb-2">Teacher, Bangalore</p>
+                        <p class="text-gray-500 text-xs mb-3">Hindu, Never Married</p>
+                        <button class="w-full bg-deep-maroon text-white py-2 rounded-lg text-sm font-semibold hover-lift btn-glow group">
+                            View Profile
+                            <i class="fas fa-heart ml-2 transform group-hover:scale-125 group-hover:text-pink-300 transition-all duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover-scale card-tilt scroll-reveal stagger-4 group">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Profile" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-deep-maroon text-lg mb-1">Vikram, 31</h3>
+                        <p class="text-gray-600 text-sm mb-2">Business Owner, Pune</p>
+                        <p class="text-gray-500 text-xs mb-3">Hindu, Never Married</p>
+                        <button class="w-full bg-deep-maroon text-white py-2 rounded-lg text-sm font-semibold hover-lift btn-glow group">
+                            View Profile
+                            <i class="fas fa-heart ml-2 transform group-hover:scale-125 group-hover:text-pink-300 transition-all duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 md:py-16 scroll-reveal">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="animate-slide-in-left">
+                    <h3 class="text-xl font-bold mb-4 hover:text-warm-gold transition-colors duration-300">Perfect<span class="text-warm-gold">Match</span></h3>
+                    <p class="text-gray-400 mb-4">India's most trusted matrimonial platform helping millions find their perfect life partner.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-warm-gold transition-all duration-300 transform hover:scale-125"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-warm-gold transition-all duration-300 transform hover:scale-125"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-warm-gold transition-all duration-300 transform hover:scale-125"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-warm-gold transition-all duration-300 transform hover:scale-125"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.2s">
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Success Stories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Help & Support</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.4s">
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Premium Membership</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Elite Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Personal Matchmaker</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Profile Writing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white hover:translate-x-2 transition-all duration-300 inline-block">Photo Services</a></li>
+                    </ul>
+                </div>
+                <div class="animate-slide-in-right">
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center group">
+                            <i class="fas fa-phone text-warm-gold mr-3 group-hover:animate-bounce-gentle"></i>
+                            <span class="text-gray-400 group-hover:text-white transition-colors duration-300">+91 98765 43210</span>
+                        </div>
+                        <div class="flex items-center group">
+                            <i class="fas fa-envelope text-warm-gold mr-3 group-hover:animate-bounce-gentle"></i>
+                            <span class="text-gray-400 group-hover:text-white transition-colors duration-300">support@perfectmatch.com</span>
+                        </div>
+                        <div class="flex items-start group">
+                            <i class="fas fa-map-marker-alt text-warm-gold mr-3 mt-1 group-hover:animate-bounce-gentle"></i>
+                            <span class="text-gray-400 group-hover:text-white transition-colors duration-300">123 Business Center, Mumbai, India</span>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <h5 class="text-sm font-semibold mb-2">Subscribe to Newsletter</h5>
+                        <div class="flex">
+                            <input type="email" placeholder="Your email" class="flex-1 px-3 py-2 bg-gray-800 text-white rounded-l-lg input-focus transition-all duration-300">
+                            <button class="bg-warm-gold text-white px-4 py-2 rounded-r-lg hover-lift btn-glow group">
+                                <i class="fas fa-paper-plane group-hover:translate-x-1 transition-transform duration-300"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center animate-fade-in">
+                <p class="text-gray-400">&copy; 2024 PerfectMatch. All rights reserved. Made with <span class="text-red-500 animate-pulse">❤️</span> for finding true love.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Chatbot -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button class="bg-deep-maroon text-white w-14 h-14 rounded-full shadow-lg hover-scale animate-bounce-gentle group relative">
+            <i class="fas fa-comments text-xl group-hover:scale-110 transition-transform duration-300"></i>
+            <div class="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
+            <!-- Typing Indicator -->
+            <div class="absolute -top-12 right-0 bg-white rounded-lg p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </button>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="fixed bottom-6 left-6 z-50">
+        <button id="dark-mode-toggle" class="bg-gray-800 text-white w-12 h-12 rounded-full shadow-lg hover-scale group">
+            <i class="fas fa-moon text-lg group-hover:rotate-12 transition-transform duration-300"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        // Loading Screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                }, 300);
+            }, 1500);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('navbar-blur');
+            } else {
+                navbar.classList.remove('navbar-blur');
+            }
+        });
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Typing Effect for Headlines
+        const headlines = [
+            "Find Your Perfect Match",
+            "Start Your Love Journey",
+            "Meet Your Life Partner",
+            "Discover True Love"
+        ];
+        
+        let currentHeadline = 0;
+        const typingElement = document.getElementById('typing-headline');
+        
+        function typeHeadline() {
+            typingElement.textContent = headlines[currentHeadline];
+            typingElement.style.animation = 'none';
+            setTimeout(() => {
+                typingElement.style.animation = 'typing 3.5s steps(40, end), blink-caret .75s step-end infinite';
+            }, 100);
+            
+            currentHeadline = (currentHeadline + 1) % headlines.length;
+        }
+        
+        // Change headline every 5 seconds
+        setInterval(typeHeadline, 5000);
+
+        // Button Click Effects
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Heart Animation on Profile Cards
+        document.querySelectorAll('.fa-heart').forEach(heart => {
+            heart.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.style.color = '#ff69b4';
+                this.style.transform = 'scale(1.5)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 300);
+            });
+        });
+
+        // Dark Mode Toggle
+        document.getElementById('dark-mode-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark');
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('dark')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Smooth Scrolling for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add CSS for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
